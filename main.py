@@ -6,8 +6,8 @@ import dash_core_components as dcc
 import dash_html_components as html
 import base64
 
-url_data = 'https://raw.githubusercontent.com/Jorgegarciasamper/ClinGen/master/CSV/Clingen-Gene-Disease-Summary-2021-04-09.csv'
-df = pd.read_csv(url_data,delimiter=',',skiprows=(0,1,2,3,5),header=[0])
+#url_data = 'https://raw.githubusercontent.com/Jorgegarciasamper/ClinGen/master/CSV/Clingen-Gene-Disease-Summary-2021-04-09.csv'
+df = pd.read_csv(r"CSV/Clingen-Gene-Disease-Summary-2021-04-09.csv",delimiter=',',skiprows=(0,1,2,3,5),header=[0])
 df_genes_disease = df[['GENE SYMBOL', 'DISEASE LABEL']]
 
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -63,6 +63,7 @@ app.layout = html.Div([header, sidebar, content])
 
 def update_output(value):
     dfs = df_genes_disease.loc[df_genes_disease['GENE SYMBOL'] == value]
+    dfs = dfs.drop_duplicates()
     return dfs.to_dict('records')
 
 if __name__ == '__main__':
